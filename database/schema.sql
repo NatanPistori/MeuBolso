@@ -1,0 +1,38 @@
+CREATE DATABASE IF NOT EXISTS meubolso CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE meubolso;
+
+CREATE TABLE IF NOT EXISTS categorias (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  tipo ENUM('entrada','saida') NOT NULL,
+  cor VARCHAR(7) DEFAULT '#888888',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS transacoes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  data DATE NOT NULL,
+  descricao VARCHAR(200) NOT NULL,
+  valor DECIMAL(10,2) NOT NULL,
+  tipo ENUM('entrada','saida') NOT NULL,
+  categoria_id INT,
+  cartao VARCHAR(100) DEFAULT NULL,
+  fixo TINYINT(1) DEFAULT 0,
+  obs TEXT DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS bens (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  valor DECIMAL(12,2) NOT NULL,
+  tipo ENUM('imovel','veiculo','investimento','dinheiro','consorcio') NOT NULL,
+  obs TEXT DEFAULT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS configuracoes (
+  chave VARCHAR(100) PRIMARY KEY,
+  valor VARCHAR(500) NOT NULL
+);
